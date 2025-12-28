@@ -1,255 +1,403 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>DOM Bit-Tree</title>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+    
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <title>Welcome to 2026 • Lutan Tech</title>
+    
+        <meta name="description" content="Welcome to 2026 with an interactive fireworks experience by Lutan Tech. Click, explode, get motivated, and celebrate the future with code powered visuals.">
+        <meta name="keywords" content="fireworks, interactive fireworks, Lutan Tech, 2026, web animation, JavaScript canvas, motivational quotes">
+        <meta name="author" content="Lutan Tech">
+        <meta name="robots" content="index, follow">
+    
+        <link rel="canonical" href="https://fireworks-zone.vercel.app/2026">
+    
+        <link rel="icon" href="icon.png" type="image/png">
+    
+        <meta property="og:title" content="Welcome to 2026 • Lutan Tech">
+        <meta property="og:description" content="An interactive fireworks experience with motivation and futuristic vibes. Built by Lutan Tech.">
+        <meta property="og:url" content="https://fireworks-zone.vercel.app/2026">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://fireworks-zone.vercel.app/2026/icon.png">
+    
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Welcome to 2026 • Lutan Tech">
+        <meta name="twitter:description" content="Click, explode, get motivated. A 2026 fireworks experience by Lutan Tech.">
+        <meta name="twitter:image" content="https://fireworks-zone.vercel.app/2026/icon.png">
+    
+        <meta name="theme-color" content="#080810">
+    </head>
+    
     <style>
         body {
             margin: 0;
-            background: #020205;
             overflow: hidden;
-            font-family: system-ui;
-            perspective: 1000px;
-            touch-action: none;
+            background: #080810;
+            cursor: crosshair;
+            font-family: system-ui, sans-serif;
         }
-        #world {
-            position: absolute;
-            inset: 0;
-            transform-style: preserve-3d;
-            will-change: transform;
-            transition: left 0.5s ease-out, top 0.5s ease-out;
+
+        canvas {
+            display: block;
         }
-        .bit {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background-size: cover;
-            will-change: transform;
-            transition: opacity 0.3s;
-            cursor: pointer;
-        }
-        .star {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: #ffea00;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            box-shadow: 0 0 30px #ffea00;
-            will-change: transform;
-            z-index: 10;
-            cursor: pointer;
-        }
-        .firework-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        #loading {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #228b22;
-            z-index: 100;
-            text-align: center;
-        }
-        #hint {
+
+        #welcomeIcon {
             position: fixed;
             bottom: 20px;
-            width: 100%;
+            right: 20px;
+            font-size: 32px;
+            cursor: pointer;
+            z-index: 999;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        #welcomeCard {
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 8, 16, 0.92);
+            color: white;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
             text-align: center;
-            color: rgba(255,255,255,0.3);
-            font-size: 11px;
-            pointer-events: none;
+            z-index: 1000;
+            padding: 20px;
         }
-        video { display: none; }
+
+        #welcomeCard h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+        }
+
+        #welcomeCard h2 {
+            color: #7BF1A8;
+            margin-bottom: 15px;
+        }
+
+        #welcomeCard p {
+            max-width: 540px;
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        #quoteBox {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #FDFFB6;
+            min-height: 60px;
+        }
+
+        #quoteBtn {
+            margin-top: 15px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #7BF1A8;
+            color: #080810;
+            font-weight: 600;
+        }
+
+        #quoteBtn:hover {
+            opacity: 0.85;
+        }
+        #welcomeIcon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(6px);
+            border-radius: 30px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 999;
+            animation: pulse 2s infinite;
+            color: white;
+        }
+        
+        #welcomeIcon span {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        #year{
+            z-index:10;
+             color:rgb(255, 255, 255);
+              top:40%;
+              font-size: 3em;
+              position: absolute;
+              right: 40%;
+              left: 40%;
+              margin: auto;
+              font-weight: 900;
+              animation: cl 10s ease-in;
+              text-align: center;
+              user-select: none;
+              pointer-events: none;
+              font-family: Arial, Helvetica, sans-serif;
+
+        }
+        .info{
+            position: absolute;
+            bottom: 10px;
+            right: 0;
+            left: 0;
+            margin: auto;
+            z-index: 10;
+            color: rgb(255, 255, 255);
+            text-align: center;
+        }
+        @keyframes cl {
+            from{
+                color:rgba(255, 255, 255, 0.07);
+            }
+            10%{
+                rotate: 45deg;
+                color: #0f0;
+            }
+            50%{
+                scale: 2;
+                color: red;
+            }
+            70%{
+                color: yellow;
+            }
+            90%{
+                rotate: -35deg;
+                color: magenta;
+            }
+            98%{
+                scale: 0;
+            }
+            1%{
+                scale: 0.5;
+            }
+            
+        }
+        
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/hands.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 </head>
+
 <body>
-<div id="loading">Initializing Camera...</div>
-<div id="hint">✋ OPEN: TREE | ✊ FIST: DISINTEGRATE | SCROLL: ZOOM | CLICK BIT: FOCUS</div>
-<video id="video" autoplay playsinline></video>
-<div id="world"></div>
+<h2 id="year">2026</h2>
+<div class="info">Click anywhere to generate firework</div>
 
+<canvas id="canvas"></canvas>
+
+<div id="welcomeIcon">
+    🎆
+    <span>Click Me</span>
+</div>
+
+<div id="welcomeCard">
+    <h1>Welcome to 2026 🚀</h1>
+    <h2>Lutan Tech</h2>
+
+    <p>
+        I build clean, fast, modern web apps.<br>
+        Full stack developer using Python, JavaScript, and Flask.<br>
+        Turning ideas into real digital products ✨
+        <hr style="width: 100%; border:1px solid #0000">
+    <a style="color: #0f0;" target="_blank" href="https://lutan-tech.is-great.org?utm_source=2026fireworks&utm_medium=direct"> Visit site</a>
+
+    </p>
+
+    <div id="quoteBox">Click the button. Motivation loading…</div>
+    <button id="quoteBtn">Generate Motivation 🔥</button>
+
+
+    <small style="margin-top:20px; opacity:0.6">(Click anywhere to close)</small>
+</div>
 <script>
-    (function() {
-        const world = document.getElementById('world');
-        const video = document.getElementById('video');
-        const loading = document.getElementById('loading');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        let w = window.innerWidth, h = window.innerHeight;
-        let bits = [];
-        let state = "tree";
-        let scale = 1, targetScale = 1, scrollAcc = 0;
-        
-        let focusX = 0;
-        let focusY = 0;
+    let width, height;
+    let fireworks = [];
+    let particles = [];
 
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const colors = [
+        '#FF6AD5',
+        '#C77DFF',
+        '#7BF1A8',
+        '#FFCFD2',
+        '#8ECAE6',
+        '#FDFFB6',
+        '#FF9770'
+    ];
 
-        function playPop() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(100 + Math.random() * 300, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueToTime(10, audioCtx.currentTime + 0.3);
-            g.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-            osc.connect(g).connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.3);
+    const quotes = [
+        "You are early. Keep building.",
+        "Nobody sees the grind until the results show.",
+        "Ship it scared. Improve it later.",
+        "Consistency beats motivation every time.",
+        "Your future self is watching. Do not disappoint.",
+        "Ideas are cheap. Execution is rare.",
+        "Build something that scares you a little.",
+        "You are one project away from changing everything.",
+        "Keep going. You are closer than you think.",
+        "Sleep is optional. Purpose is not."
+    ];
+
+    function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    function playWhooshSound() {
+        if (audioCtx.state === 'suspended') return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 1);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 1);
+    }
+
+    function playPopSound() {
+        if (audioCtx.state === 'suspended') return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400 + Math.random() * 200, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+    }
+
+    class Firework {
+        constructor(x, targetY, color) {
+            this.x = x;
+            this.y = height;
+            this.targetY = targetY;
+            this.color = color;
+            this.velocity = (targetY - height) / 60;
+            this.dead = false;
+            playWhooshSound();
         }
-
-        function createFirework(x, y) {
-            playPop();
-            const hue = Math.random() * 360;
-            for (let i = 0; i < 15; i++) {
-                const p = document.createElement('div');
-                p.className = 'firework-particle';
-                p.style.backgroundColor = `hsl(${hue}, 100%, 60%)`;
-                world.appendChild(p);
-                
-                const angle = Math.random() * Math.PI * 2;
-                const dist = 50 + Math.random() * 100;
-                const tx = x + Math.cos(angle) * dist;
-                const ty = y + Math.sin(angle) * dist;
-
-                p.style.left = x + 'px';
-                p.style.top = y + 'px';
-                
-                p.animate([
-                    { transform: 'translate(0,0) scale(1)', opacity: 1 },
-                    { transform: `translate(${tx - x}px, ${ty - y}px) scale(0)`, opacity: 0 }
-                ], { duration: 800 + Math.random() * 400, easing: 'ease-out' }).onfinish = () => p.remove();
-            }
-        }
-
-        class Bit {
-            constructor(tx, ty, type) {
-                this.tx = tx; this.ty = ty;
-                this.x = Math.random() * w; this.y = Math.random() * h;
-                this.el = document.createElement('div');
-                this.el.className = type === 'star' ? 'star' : 'bit';
-                if (type !== 'star') {
-                    this.el.style.backgroundColor = type === 'leaf' ? '#228b22' : '#ff4d6d';
-                    if (Math.random() > 0.8) this.el.style.backgroundColor = '#fff';
-                }
-                
-                this.el.onclick = (e) => {
-                    e.stopPropagation();
-                    targetScale = 3.5;
-                    focusX = (w / 2) - this.tx;
-                    focusY = (h / 2) - this.ty;
-                };
-
-                world.appendChild(this.el);
-            }
-
-            update() {
-                let dx, dy;
-                if (state === "disintegrated") {
-                    const noiseX = Math.sin(Date.now() * 0.0015 + this.tx) * 220;
-                    const noiseY = Math.cos(Date.now() * 0.0015 + this.ty) * 220;
-                    dx = (this.tx + noiseX) - this.x;
-                    dy = (this.ty + noiseY) - this.y;
-                    this.x += dx * 0.04;
-                    this.y += dy * 0.04;
-                } else {
-                    dx = this.tx - this.x;
-                    dy = this.ty - this.y;
-                    this.x += dx * 0.1;
-                    this.y += dy * 0.1;
-                }
-                this.el.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
+        update() {
+            this.y += this.velocity;
+            if (this.y <= this.targetY) {
+                this.dead = true;
+                this.explode();
             }
         }
-
-        function build() {
-            world.innerHTML = '';
-            bits = [];
-            const cx = w / 2 - 6, cy = h / 2 - 100;
-            bits.push(new Bit(cx - 8, cy - 85, 'star'));
-            for (let r = 0; r < 15; r++) {
-                const rowW = r * 15;
-                for (let i = 0; i < r; i++) {
-                    const x = cx - (rowW / 2) + (i * 15);
-                    const y = cy + (r * 18);
-                    bits.push(new Bit(x, y, Math.random() > 0.9 ? 'ornament' : 'leaf'));
-                }
-            }
-            for (let t = 0; t < 12; t++) {
-                bits.push(new Bit(cx - 10 + (t % 3) * 12, cy + 270 + Math.floor(t / 3) * 12, 'trunk'));
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+        explode() {
+            playPopSound();
+            for (let i = 0; i < 300; i++) {
+                particles.push(new Particle(this.x, this.y, this.color));
             }
         }
+    }
 
-        const hands = new Hands({ locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/${f}` });
-        hands.setOptions({ maxNumHands: 1, modelComplexity: 0, minDetectionConfidence: 0.5 });
-        hands.onResults(res => {
-            loading.style.display = 'none';
-            if (res.multiHandLandmarks?.length) {
-                const lm = res.multiHandLandmarks[0];
-                const isFist = [8, 12, 16, 20].every(i => lm[i].y > lm[i - 2].y);
-                state = isFist ? "disintegrated" : "tree";
-            } else {
-                state = "tree";
-            }
+    class Particle {
+        constructor(x, y, color) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.angle = Math.random() * Math.PI * 2;
+            this.speed = Math.random() * 5 + 1;
+            this.friction = 0.96;
+            this.gravity = 0.12;
+            this.alpha = 1;
+            this.decay = Math.random() * 0.015 + 0.015;
+        }
+        update() {
+            this.speed *= this.friction;
+            this.x += Math.cos(this.angle) * this.speed;
+            this.y += Math.sin(this.angle) * this.speed + this.gravity;
+            this.alpha -= this.decay;
+        }
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.alpha;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    function launchFirework(x, y) {
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const targetX = x ?? Math.random() * width;
+        const targetY = y ?? Math.random() * height * 0.5;
+        fireworks.push(new Firework(targetX, targetY, color));
+    }
+
+    function animate() {
+        ctx.fillStyle = 'rgba(8, 8, 16, 0.2)';
+        ctx.fillRect(0, 0, width, height);
+        if (Math.random() < 0.03) launchFirework();
+        fireworks.forEach((fw, i) => {
+            fw.update();
+            fw.draw();
+            if (fw.dead) fireworks.splice(i, 1);
         });
-
-        async function startCamera() {
-            try {
-                const camera = new Camera(video, { 
-                    onFrame: async () => await hands.send({ image: video }), 
-                    width: 640, 
-                    height: 480 
-                });
-                await camera.start();
-            } catch (err) {
-                loading.innerHTML = "Camera access denied.<br>Please allow camera permissions and refresh.";
-                loading.style.color = "#ff4d6d";
-            }
-        }
-
-        startCamera();
-
-        window.addEventListener('wheel', e => {
-            targetScale -= e.deltaY * 0.001;
-            targetScale = Math.min(Math.max(0.3, targetScale), 5);
-            scrollAcc += Math.abs(e.deltaY);
-            if (scrollAcc > 150) {
-                createFirework(Math.random() * w, Math.random() * h * 0.5);
-                scrollAcc = 0;
-            }
+        particles.forEach((p, i) => {
+            p.update();
+            p.draw();
+            if (p.alpha <= 0) particles.splice(i, 1);
         });
+        requestAnimationFrame(animate);
+    }
 
-        document.body.onclick = () => {
-            focusX = 0;
-            focusY = 0;
-            targetScale = 1;
-        };
+    document.getElementById('welcomeIcon').onclick = () => {
+        document.getElementById('welcomeCard').style.display = 'flex';
+    };
 
-        function loop() {
-            scale += (targetScale - scale) * 0.1;
-            world.style.transformOrigin = `${w/2}px ${h/2}px`;
-            world.style.transform = `translate3d(${focusX * scale}px, ${focusY * scale}px, 0) scale(${scale})`;
-            bits.forEach(b => b.update());
-            requestAnimationFrame(loop);
-        }
+    document.getElementById('welcomeCard').onclick = () => {
+        document.getElementById('welcomeCard').style.display = 'none';
+    };
 
-        window.addEventListener('resize', () => { 
-            w = window.innerWidth; 
-            h = window.innerHeight; 
-            build(); 
-        });
-        
-        build();
-        loop();
-    })();
+    document.getElementById('quoteBtn').onclick = (e) => {
+        e.stopPropagation();
+        const q = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById('quoteBox').textContent = q;
+    };
+
+    window.addEventListener('mousedown', e => {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        launchFirework(e.clientX, e.clientY);
+    });
+
+    animate();
 </script>
+
 </body>
 </html>
